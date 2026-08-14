@@ -1,0 +1,2 @@
+Hello, this is written using open() and write(). PARENt
+Hello, this is written using open() and write(). CHILD
