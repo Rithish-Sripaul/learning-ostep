@@ -37,3 +37,5 @@ void add_node(struct node** data, char* buffer) {
   new_node->prev = p;
   return;
 }
+
+void read_input_file(struct node** data, FILE* fp) { FILE* fp = return; }

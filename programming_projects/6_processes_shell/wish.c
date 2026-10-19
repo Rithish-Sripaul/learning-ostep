@@ -6,21 +6,21 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-pid_t create_process(char* buffer);
-char** parse_line_to_argv(char* line);
-char** add_path(char** search_paths, int MAX_PATHS, int num_paths,
-                char* new_path);
-void free_argv(char** argv);
-void throw_error(char* message);
+pid_t create_process(char *buffer);
+char **parse_line_to_argv(char *line);
+char **add_path(char **search_paths, int MAX_PATHS, int num_paths,
+                char *new_path);
+void free_argv(char **argv);
+void throw_error(char *message);
 
-int main(int argc, char* argv[]) {
+int main(int argc, char *argv[]) {
   // SEARCH PATHS
   int MAX_PATHS = 4;
   int num_paths = 0;
-  char** search_paths = malloc(MAX_PATHS * sizeof(char*));
+  char **search_paths = malloc(MAX_PATHS * sizeof(char *));
 
   // COMMANDS
-  char* buffer = NULL;
+  char *buffer = NULL;
   while (true) {
     printf("wish> ");
     buffer = NULL;
@@ -37,8 +37,8 @@ int main(int argc, char* argv[]) {
   return 0;
 }
 
-pid_t create_process(char* buffer) {
-  char** argv = parse_line_to_argv(buffer);
+pid_t create_process(char *buffer) {
+  char **argv = parse_line_to_argv(buffer);
 
   if (argv[0] == NULL) {
     free_argv(argv);
@@ -91,20 +91,20 @@ pid_t create_process(char* buffer) {
   return child_pid;
 }
 
-char** parse_line_to_argv(char* line) {
+char **parse_line_to_argv(char *line) {
   int capacity = 4;
   int argc = 0;
 
-  char** argv = malloc(capacity * sizeof(char*));
+  char **argv = malloc(capacity * sizeof(char *));
   if (!argv) {
     perror("Failed to allocate argv");
     return NULL;
   }
 
-  const char* delimiters = " \t\n";
-  char* token;
+  const char *delimiters = " \t\n";
+  char *token;
 
-  char* runner = line;
+  char *runner = line;
 
   while ((token = strsep(&runner, delimiters)) != NULL) {
     if (*token == '\0') {
@@ -113,7 +113,7 @@ char** parse_line_to_argv(char* line) {
 
     if (argc >= capacity - 1) {
       capacity = capacity * 2;
-      char** temp = realloc(argv, capacity * sizeof(char*));
+      char **temp = realloc(argv, capacity * sizeof(char *));
       if (!temp) {
         perror("Failed to realloc argv");
         free_argv(argv);
@@ -135,26 +135,26 @@ char** parse_line_to_argv(char* line) {
   return argv;
 }
 
-char** add_path(char** search_paths, int MAX_PATHS, int num_paths,
-                char* new_path) {
+char **add_path(char **search_paths, int MAX_PATHS, int num_paths,
+                char *new_path) {
   if (num_paths >= MAX_PATHS - 1) {
     MAX_PATHS *= 2;
-    char** temp = realloc(search_paths, MAX_PATHS * sizeof(char*));
+    char **temp = realloc(search_paths, MAX_PATHS * sizeof(char *));
     if (!temp) {
       free_argv(search_paths);
-      reutrn NULL;
+      return NULL;
     }
   }
 }
 
-void free_argv(char** argv) {
+void free_argv(char **argv) {
   for (int i = 0; argv[i] != NULL; i++) {
     free(argv[i]);
   }
   free(argv);
 }
 
-void throw_error(char* message) {
+void throw_error(char *message) {
   char error_message[256];
 
   snprintf(error_message, sizeof(error_message), "An error has occurred: %s\n",
